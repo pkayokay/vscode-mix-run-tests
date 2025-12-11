@@ -5,14 +5,14 @@ Quick commands to run your Elixir/Phoenix tests in VS Code.
 ## Features
 
 * Toggle between program file and test file
-* Run test for current program file or test file
-* Run test for the nearest test block (current line)
+* Run mix test for current program file or test file
+* Run mix test for the nearest test block (current line)
 
 ## Keybindings
 
 * **Toggle**: `alt+d` - Switch between source file (`*.ex`) and test file (`*_test.exs`)
 * **Run test**: `alt+f` - Run all tests in the current file (or corresponding test file)
-* **Run test for current line**: `alt+v` - Run the nearest test block containing the cursor
+* **Run mix test for current line**: `alt+v` - Run the nearest test block containing the cursor
 
 ## Usage
 

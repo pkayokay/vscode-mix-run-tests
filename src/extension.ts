@@ -86,7 +86,7 @@ function getToggleTarget(currentFile: string): string | null {
 }
 
 /**
- * Run tests for the current file
+ * Run mix tests for the current file
  */
 async function runTest() {
     const editor = vscode.window.activeTextEditor;
