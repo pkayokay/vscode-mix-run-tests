@@ -1,0 +1,60 @@
+{
+  "name": "mix-run-tests",
+  "displayName": "Mix Run Tests",
+  "description": "Quick commands to run your Elixir/Phoenix tests",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:elixir"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mix-run-tests.toggle",
+        "title": "Toggle between source and test file"
+      },
+      {
+        "command": "mix-run-tests.runTest",
+        "title": "Run test for current file"
+      },
+      {
+        "command": "mix-run-tests.runNearestTest",
+        "title": "Run test for current line"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mix-run-tests.toggle",
+        "key": "alt+d",
+        "when": "editorTextFocus && resourceLangId == 'elixir'"
+      },
+      {
+        "command": "mix-run-tests.runTest",
+        "key": "alt+f",
+        "when": "editorTextFocus && resourceLangId == 'elixir'"
+      },
+      {
+        "command": "mix-run-tests.runNearestTest",
+        "key": "alt+v",
+        "when": "editorTextFocus && resourceLangId == 'elixir'"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}
+
