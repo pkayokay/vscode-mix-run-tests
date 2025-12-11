@@ -1,4 +1,5 @@
 {
+  "publisher": "pkayokay",
   "name": "mix-run-tests",
   "displayName": "Mix Run Tests",
   "description": "Quick commands to run your Elixir/Phoenix tests",
