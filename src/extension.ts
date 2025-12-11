@@ -209,41 +209,68 @@ function getTestFile(filePath: string): string | null {
 
 /**
  * Find the line number of the nearest test block containing or above the cursor
+ * Prioritizes 'test' blocks over 'describe' blocks
  */
 function findNearestTestLine(document: vscode.TextDocument, cursorLine: number): number | null {
     const text = document.getText();
     const lines = text.split('\n');
 
-    // Look for test blocks: test "description" do
-    // We'll find the test that contains the cursor line or is the closest one above
     let nearestTestLine: number | null = null;
     let lastTestStartLine: number | null = null;
+    let nearestDescribeLine: number | null = null;
+    let lastDescribeStartLine: number | null = null;
 
+    // Single loop checking both test and describe blocks, prioritizing test blocks
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         
-        // Match: test "description" do or test "description", do: or describe "description" do
-        // Also handle: test "description" do\n or test("description") do
-        const testMatch = line.match(/^\s*(test\s+["']|describe\s+["']|test\s*\(["'])/);
+        // Match test blocks: test "description" do or test("description") do
+        const testMatch = line.match(/^\s*(test\s+["']|test\s*\(["'])/);
         if (testMatch) {
             lastTestStartLine = i;
-            // Find the matching end to determine if cursor is within this block
             const testEndLine = findTestBlockEnd(lines, i);
             
-            // If cursor is within this test block, this is our match
+            // If cursor is within this test block, this is our match (priority)
             if (i <= cursorLine && cursorLine <= testEndLine) {
                 nearestTestLine = i;
-                break;
+                break; // Found a test block containing cursor, no need to check describe
+            }
+        }
+        
+        // Match describe blocks: describe "description" do
+        const describeMatch = line.match(/^\s*(describe\s+["']|describe\s*\(["'])/);
+        if (describeMatch) {
+            lastDescribeStartLine = i;
+            const describeEndLine = findTestBlockEnd(lines, i);
+            
+            // If cursor is within this describe block, remember it (but test has priority)
+            if (i <= cursorLine && cursorLine <= describeEndLine) {
+                nearestDescribeLine = i;
             }
         }
     }
 
-    // If cursor is not within any test block, use the last test block before the cursor
-    if (nearestTestLine === null && lastTestStartLine !== null && lastTestStartLine <= cursorLine) {
-        nearestTestLine = lastTestStartLine;
+    // Prioritize test blocks: if we found a test block containing the cursor, use it
+    if (nearestTestLine !== null) {
+        return nearestTestLine;
     }
 
-    return nearestTestLine;
+    // Otherwise, use the last test block before the cursor
+    if (lastTestStartLine !== null && lastTestStartLine <= cursorLine) {
+        return lastTestStartLine;
+    }
+
+    // Fall back to describe blocks: if we found a describe block containing the cursor, use it
+    if (nearestDescribeLine !== null) {
+        return nearestDescribeLine;
+    }
+
+    // Finally, use the last describe block before the cursor
+    if (lastDescribeStartLine !== null && lastDescribeStartLine <= cursorLine) {
+        return lastDescribeStartLine;
+    }
+
+    return null;
 }
 
 /**

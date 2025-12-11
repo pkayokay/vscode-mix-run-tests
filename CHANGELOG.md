@@ -2,6 +2,14 @@
 
 All notable changes to this extension will be documented in this file.
 
+## [0.0.3] - 2025-12-11
+- Run nearest test block runs on specific "test" block instead of moving up to "describe".
+
+## [0.0.2] - 2025-12-11
+
+### Added
+- Changelog update
+
 ## [0.0.1] - 2025-12-11
 
 ### Added
